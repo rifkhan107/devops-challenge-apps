@@ -21,20 +21,28 @@ jobs:
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           aws-region: ${{ secrets.AWS_REGION }}
 
-      - name: Login to Public ECR
-        run: |
-          aws ecr-public get-login-password --region ${{ secrets.AWS_REGION }} | docker login --username AWS --password-stdin public.ecr.aws
+      - name: Login to Amazon ECR Public
+        id: login-ecr-public
+        uses: aws-actions/amazon-ecr-login@v2
+        with:
+          registry-type: public
 
-      - name: Build and Push Web Docker image
+      - name: Build, tag, and push Web docker image to Amazon ECR Public
+        env:
+          REGISTRY: ${{ steps.login-ecr-public.outputs.registry }}
+          IMAGE_TAG: ${{ github.sha }}
         run: |
-          WEB_IMAGE_URI="public.ecr.aws/d3k6a8t8/web:${{ github.sha }}"
+          WEB_IMAGE_URI="$REGISTRY/d3k6a8t8/web:$IMAGE_TAG"
           docker build -t $WEB_IMAGE_URI -f ./web/Dockerfile ./web
           docker push $WEB_IMAGE_URI
           echo "WEB_IMAGE_URI=$WEB_IMAGE_URI" >> $GITHUB_ENV
 
-      - name: Build and Push API Docker image
+      - name: Build, tag, and push API docker image to Amazon ECR Public
+        env:
+          REGISTRY: ${{ steps.login-ecr-public.outputs.registry }}
+          IMAGE_TAG: ${{ github.sha }}
         run: |
-          API_IMAGE_URI="public.ecr.aws/d3k6a8t8/api:${{ github.sha }}"
+          API_IMAGE_URI="$REGISTRY/d3k6a8t8/api:$IMAGE_TAG"
           docker build -t $API_IMAGE_URI -f ./api/Dockerfile ./api
           docker push $API_IMAGE_URI
           echo "API_IMAGE_URI=$API_IMAGE_URI" >> $GITHUB_ENV
