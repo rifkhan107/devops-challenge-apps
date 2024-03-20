@@ -64,4 +64,8 @@ jobs:
           sed -i "s|IMAGE_URL_PLACEHOLDER_WEB|$WEB_IMAGE_URI|g" ./k8s/web-app.yaml
           sed -i "s|IMAGE_URL_PLACEHOLDER_API|$API_IMAGE_URI|g" ./k8s/api-app.yaml
           kubectl apply -f ./k8s/web-app.yaml
+<<<<<<< HEAD
           kubectl apply -f ./k8s/api-app.yaml
+=======
+          kubectl apply -f ./k8s/api-app.yaml
+>>>>>>> 8bf9527 (Resolved merge conflicts.)
