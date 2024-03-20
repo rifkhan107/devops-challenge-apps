@@ -28,14 +28,14 @@ jobs:
       - name: Build and Push Web Docker image
         run: |
           WEB_IMAGE_URI="${{ steps.login-ecr.outputs.registry }}/${{ secrets.ECR_WEB_REPOSITORY }}:${{ github.sha }}"
-          docker build -t $WEB_IMAGE_URI -f /web/Dockerfile ./devops-challenge-apps/web
+          docker build -t $WEB_IMAGE_URI -f ./web/Dockerfile ./web
           docker push $WEB_IMAGE_URI
           echo "WEB_IMAGE_URI=$WEB_IMAGE_URI" >> $GITHUB_ENV
 
       - name: Build and Push API Docker image
         run: |
           API_IMAGE_URI="${{ steps.login-ecr.outputs.registry }}/${{ secrets.ECR_API_REPOSITORY }}:${{ github.sha }}"
-          docker build -t $API_IMAGE_URI -f /api/Dockerfile ./devops-challenge-apps/api
+          docker build -t $API_IMAGE_URI -f ./api/Dockerfile ./api
           docker push $API_IMAGE_URI
           echo "API_IMAGE_URI=$API_IMAGE_URI" >> $GITHUB_ENV
 
