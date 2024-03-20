@@ -17,7 +17,13 @@ spec:
       - name: api-container
         image: IMAGE_URL_PLACEHOLDER_API
         ports:
-        - containerPort: 80
+        - containerPort: 3000
+        env:
+          - name: DB
+            valueFrom:
+              secretKeyRef:
+                name: db-credentials
+                key: DB
 ---
 apiVersion: v1
 kind: Service
@@ -30,5 +36,4 @@ spec:
     app: api
   ports:
   - port: 80
-    targetPort: 80
-
+    targetPort: 3000
