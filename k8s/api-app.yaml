@@ -25,28 +25,10 @@ metadata:
   name: api-service
   namespace: app
 spec:
-  type: ClusterIP
+  type: LoadBalancer
   selector:
     app: api
   ports:
   - port: 80
     targetPort: 80
----
-apiVersion: networking.k8s.io/v1
-kind: Ingress
-metadata:
-  name: api-ingress
-  namespace: app
-  annotations:
-    nginx.ingress.kubernetes.io/use-regex: "true"
-spec:
-  rules:
-    - http:
-        paths:
-          - path: /api(/|$)(.*)
-            pathType: Prefix
-            backend:
-              service:
-                name: api-service
-                port:
-                  number: 80
+
