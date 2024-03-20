@@ -21,9 +21,9 @@ jobs:
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           aws-region: ${{ secrets.AWS_REGION }}
 
-      - name: Login to Amazon ECR
-        id: login-ecr
-        uses: aws-actions/amazon-ecr-login@v1
+      - name: Login to Public ECR
+        run: |
+          aws ecr-public get-login-password --region ${{ secrets.AWS_REGION }} | docker login --username AWS --password-stdin public.ecr.aws
 
       - name: Build and Push Web Docker image
         run: |
@@ -38,6 +38,7 @@ jobs:
           docker build -t $API_IMAGE_URI -f ./api/Dockerfile ./api
           docker push $API_IMAGE_URI
           echo "API_IMAGE_URI=$API_IMAGE_URI" >> $GITHUB_ENV
+
           
       - name: Set up Kubeconfig
         uses: aws-actions/configure-aws-credentials@v1
