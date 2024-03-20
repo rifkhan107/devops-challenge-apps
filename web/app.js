@@ -37,9 +37,9 @@ app.use(function(req, res, next) {
 if (app.get('env') === 'development') {
   app.use(function(err, req, res, next) {
     res.status(err.status || 500);
-    res.render({
+    res.render('error', { // 'error' is the name of the error view
       message: err.message,
-      error: err
+      error: err // Pass the error object in development
     });
   });
 }
@@ -48,9 +48,9 @@ if (app.get('env') === 'development') {
 // no stacktraces leaked to user
 app.use(function(err, req, res, next) {
   res.status(err.status || 500);
-  res.render({
+  res.render('error', { // Again, specifying the view name here
     message: err.message,
-    error: {}
+    error: {} // Not exposing error details in production
   });
 });
 

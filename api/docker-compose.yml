@@ -1,12 +1,13 @@
-api:
-  image: node:latest
-  ports:
-    - "5000:5000"
-  volumes:
-    - ./:/app/
-  working_dir: /app
-  command: npm start
-
-  environment:
-    - PORT=${API_PORT}
-    - DB=${API_DB}
+version: '3.8'
+services:
+  api:
+    image: node:latest
+    ports:
+      - "3000:3000"
+    volumes:
+      - ./:/app/
+    working_dir: /app
+    command: npm start
+    environment:
+      - PORT=${API_PORT}
+      - DB=${API_DB}
